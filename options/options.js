@@ -265,7 +265,22 @@ function updateScheduleTime(){
     showStatus('Schedule times updated', 'success');
 }
 
-function updateWorkDays(){}
+function updateWorkDays(){
+    const selectedDays = [];
+    elements.workdayCheckboxes.forEach(checkbox => {
+        if(checkbox.checked){
+            selectedDays.push(parseInt(checkbox.value));
+        }
+    });
+
+    if(selectedDays.length === 0){
+        showStatus('Please select at least one work day', 'error');
+        return;
+    }
+
+    currentConfig.schedule.workDays = selectedDays;
+    showStatus('Work days updated', 'success');
+}
 
 function addMessage(){}
 
