@@ -170,7 +170,32 @@ function updateSiteList(){
     elements.sitesList.appendChild(siteItem);
 }
 
-function updateMessageList(){}
+function updateMessageList(){
+    elements.messageList = '';
+
+    if(currentConfig.despairMessage.length === 0) {
+        elements.messageList.innerHTML =
+        `<div class="empty-state">No despair messages yet...</div>`
+        return;
+    }
+
+    currentConfig.despairMessage.forEach((message, index) => {
+        const messageItem = document.createElement('div');
+        messageItem.className = 'message-item';
+        messageItem.innerHTML = `
+            <div class="message-text">${escapeHtml(message)}</div>
+            <div class="message-action">
+            <button class="remove-message" data-index="${index}">
+                Remove 
+            </button>
+            </div>
+        `;
+        messageItem.querySelector('.remove-message')
+            .addEventListener('click', () => {removeMessage(index); });
+
+        elements.messageList.appendChild(messageItem);
+    });
+}
 
 function addSite(){}
 
