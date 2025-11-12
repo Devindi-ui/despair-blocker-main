@@ -197,17 +197,60 @@ function updateMessageList(){
     });
 }
 
-function addSite(){}
+function addSite(){
+    const siteInput = elements.newSiteInput.value.trim();
 
-function removeSite(){
+    if (!siteInput) {
+        showStatus('Please enter a website url', 'error');
+        return;
+    }
 
+    //cleanup the input remove protocol, www, etc.
+    const cleanSite = cleanSiteUrl(siteInput);
+
+    //check if site already exits
+    if (currentConfig.blockedSites.includes(cleanSite)){
+        showStatus('This site is already blocked!', 'error');
+        return;
+    }
+
+    currentConfig.blockedSites.push(cleanSite);
+
+    updateUI();
+    elements.newSiteInput.value('');
+
+    showStatus(`Added ${cleanSite} to blocked sites`, 'success')
 }
 
-function cleanSiteUrl(){}
+function removeSite(index){
+    const removedSite = currentConfig.blockedSites[index];
+    currentConfig.blockedSites.splice(index, 1);
+    updateSiteList();
+    showStatus(`Removed ${removedSite} from blocked sites`, `info`);
+}
 
-function toggleSchedule(){}
+function cleanSiteUrl(){
+    return url 
+    .replace(/^https?:\/\//, '') //remove protocol
+    .replace(/^www\./, '') //remove www
+    .replace(/\/$/, '') //remove trailing slash
+    .toLowerCase();
+}
 
-function toggleScheduleVisibillity(){}
+function toggleSchedule(){
+    currentConfig.schedule.enabled = elements.scheduleEnabled.checked;
+    toggleScheduleVisibillity();
+    showStatus(`Schedule ${currentConfig.schedule.enabled ?
+        'enabled' : 'disabled'}`, 'info');
+}
+
+function toggleScheduleVisibillity(){
+    if(currentConfig.schedule.enabled){
+        elements.scheduleSettings.classList.remove('disabled');
+    } else {
+        elements.scheduleSettings.classList.add('disabled');
+    }
+}
 
 function updateScheduleTime(){}
 
