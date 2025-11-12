@@ -337,7 +337,23 @@ async function saveSettings(){
 }
 
 async function  resetSettings() {
-    
+    const confirmed = confirm('Are you sure want to reset settings?');
+
+    if (!confirmed) return;
+
+    elements.resetBtn.classList.add('loading');
+
+    try {
+        currentConfig = getDefaultConfig();
+        await saveConfiguration();
+        updateUI();
+        showStatus('Settings reset to default', 'info');
+    } catch (error) {
+        console.error(`Reset error: `, error);
+        showStatus('Error resetting settings', 'error');        
+    } finally {
+        elements.resetBtn.classList.remove('Loading');
+    }
 }
 
 function testBlockMessage(){}
