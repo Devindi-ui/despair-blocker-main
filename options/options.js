@@ -252,7 +252,18 @@ function toggleScheduleVisibillity(){
     }
 }
 
-function updateScheduleTime(){}
+function updateScheduleTime(){
+    currentConfig.schedule.startTime = elements.startTime.value;
+    currentConfig.schedule.endTime = elements.endTime.value;
+
+    //validate time range
+    if(elements.startTime.value >= elements.endTime.value){
+        showStatus('End time must be after start time', 'error');
+        return;
+    }
+
+    showStatus('Schedule times updated', 'success');
+}
 
 function updateWorkDays(){}
 
