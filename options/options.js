@@ -301,9 +301,22 @@ function addMessage(){
     showStatus('Despair message added successfully', 'success');
 }
 
-function removeMessage(){}
+function removeMessage(){
+    if(currentConfig.despairMessage.length <= 1){
+        showStatus('You must have at least one message', 'error');
+        return;
+    }
 
-function updateTTSSettings(){}
+    currentConfig.despairMessage.splice(index, 1);
+    updateMessageList();
+    showStatus('Despair message removed', 'info');
+}
+
+function updateTTSSettings(){
+    currentConfig.enableTTS = elements.enableTTS.checked;
+    showStatus(`Text-to-speech ${currentConfig.enableTTS ? 
+    'enabled' : 'disabled'}`, 'info');
+}
 
 async function saveSettings(){}
 
