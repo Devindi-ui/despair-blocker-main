@@ -318,7 +318,23 @@ function updateTTSSettings(){
     'enabled' : 'disabled'}`, 'info');
 }
 
-async function saveSettings(){}
+async function saveSettings(){
+    elements.saveBtn.classList.add('loading');
+
+    try {
+        const success = await saveConfiguration();
+        if(success){
+            showStatus('Saving settings successfully', 'success');
+        } else {
+            showStatus('Error saving settings')
+        }
+    } catch (error) {
+        console.error('save error:', error);
+        showStatus('Error saving setting', 'error');
+    } finally {
+        elements.saveBtn.classList.remove('loading');
+    }
+}
 
 async function  resetSettings() {
     
