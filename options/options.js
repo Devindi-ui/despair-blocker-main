@@ -125,9 +125,50 @@ function setupEventListners(){
     elements.testBtn.addEventListener('click', testBlockMessage);
 }
 
-function updateUI(){}
+function updateUI(){
+    //update blocked sites
+    updateSiteList();
 
-function updateSiteList(){}
+    //update schedule settings
+    elements.scheduleEnabled.checked = currentConfig.schedule.enable;
+    elements.startTime.value = currentConfig.schedule.startTime;
+    elements.endTime.value = currentConfig.schedule.endTime;
+
+    //update work days
+    elements.workdayCheckboxes.forEach(checkbox => {
+        const day = parseInt(checkbox.value);
+        checkbox.checked = currentConfig.schedule.workDays.includes(day);
+    });
+
+    toggleScheduleVisibillity();
+    updateMessageList();
+
+    elements.enableTTS.checked = currentConfig.enableTTS;
+}
+
+function updateSiteList(){
+    elements.sitesList.innerHTML = '';
+    if (currentConfig.blockedSites.length === 0) {
+        elements.sitesList.innerHTML = 
+        `<div class="empty-state">No blocked sites yet.. Add some</div>`
+        return;
+    }
+
+    currentConfig.blockedSites.forEach((site, index) => {
+        const siteItem = document.createElement('div');
+        siteItem.className = 'site-item';
+        siteItem.innerHTML =
+            `<span class="sote-item">${escapeHtml(site)}</span>
+            <button class="remove-site" data-index="${index}">Remove</button>`
+
+        siteItem.querySelector('.remove-site').addEventListener('click', () => {
+            removeSite(index);
+        });
+    });
+
+
+    elements.sitesList.appendChild(siteItem);
+}
 
 function updateMessageList(){}
 
