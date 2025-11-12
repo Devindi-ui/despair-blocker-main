@@ -282,7 +282,24 @@ function updateWorkDays(){
     showStatus('Work days updated', 'success');
 }
 
-function addMessage(){}
+function addMessage(){
+    const messageInput = elements.newMessageInput.value.trim();
+
+    if(!messageInput){
+        showStatus('Please enter a message', 'error');
+        return;
+    }
+
+    if(messageInput.length < 10){
+        showStatus('Message should be at least 10 characters long');
+        return;
+    }
+
+    currentConfig.despairMessage.push(messageInput);
+    updateSiteList();
+    elements.newMessageInput.value = '';
+    showStatus('Despair message added successfully', 'success');
+}
 
 function removeMessage(){}
 
