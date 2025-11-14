@@ -356,7 +356,96 @@ async function  resetSettings() {
     }
 }
 
-function testBlockMessage(){}
+function testBlockMessage(){
+    const randomMessage = currentConfig.despairMessage[
+        Math.floor(Math.random() * currentConfig.despairMessage.length)
+    ];
 
-function showStatus(){} 
+    const textOverlay = document.createElement('div');
+    textOverlay.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b2e 50%, #1a1a1a 100%);
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        ">
+            <div styles="
+                text-align: center;
+                max-width: 600px;
+                padding: 40px;
+                background: rgba(0,0,0,0.8);
+                border-radius: 20px;
+                border: 2px solid #ff6b6b;
+                box-shadow: 0 20px 60px rgba(255, 107, 107, 0.3);
+            ">
+                <div style="font-size: 4rem; margin-bottom: 20px">💀</div>
+                <h1 style="
+                    color: #ff6b6b;
+                    font-size: 2.5rem;
+                    font-weight: bold
+                    margin: 0 0 30px 0;
+                    text-shadow: 0 0 20px rgba(255,107,107,0.5);
+                    letter-spacing: 2px;
+                "> TEST: BLOCKED BY DESPAIR </h1>
+                <div style="
+                    color: #ffffff;
+                    font-size: 1.2rem;
+                    line-height: 1.6;
+                    margin-bottom: 20px;
+                    padding: 20px;
+                    background: rgba(255,107,107,0.1);
+                    border-radius: 10px;
+                    border-left: 4px solid #ff6b6b;
+                ">
+                ${escapeHtml(randomMessage)}
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" style="
+                    padding: 15px 30px;
+                    border: none;
+                    border-radius: 25px;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+                    color: white;
+                    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+                ">Close Test</button>
+            </div>
+        </div>
+    `;
 
+    document.body.appendChild(textOverlay);
+
+    //Test TTS if enable
+    if(currentConfig.enableTTS && 'speechSynthesis' in window){
+        setTimeout(() => {
+            const utterence = new SpeechSynthesisUtterance(randomMessage);
+            utterence.rate = 0.8;
+            utterence.pitch = 0.7;
+            utterence.volume = 0.8;
+        }, 500);
+    }
+}
+
+function showStatus(message, type = 'info'){
+    elements.statusMessage.textContent = message;
+    elements.statusMessage.className = `status-message ${type}`;
+    elements.statusMessage.classList.add('show');
+
+    setTimeout(() => {
+        elements.statusMessage.classList.remove(`show`);
+    }, 3000);
+}
+
+function escapeHtml(text){
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
