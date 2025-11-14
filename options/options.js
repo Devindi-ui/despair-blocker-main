@@ -449,3 +449,18 @@ function escapeHtml(text){
     div.textContent = text;
     return div.innerHTML;
 }
+
+chrome.storage.onChanged.addEventListener((changes, namespace) => {
+    if(namespace === 'sync' && changes.config){
+        currentConfig = changes.config.newValue;
+        updateUI();
+        showStatus('Settings updated from another instance', 'info');
+    }
+});
+
+window.addEventListener('beforeunload', (e) => {
+    //track if there are actual unsaved changes
+    const confirmationMessage = 'You may have unsaved changes, Are you sure want to leave?';
+    e.returnValue = confirmationMessage;
+    return confirmationMessage;
+});
